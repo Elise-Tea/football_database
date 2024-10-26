@@ -34,19 +34,60 @@ function createClubCardHTML(club) {
 // Handle clicking on a football club card
 function handleClubClick(element) {
     // Write your code here for task1
+    const clickedClubCard = element;
+    if (clickedClubCard) {
+        const clickedClubTitle = clickedClubCard.querySelector('h2').textContent;
+        const selectedClub = clubData.find(club => club.name === clickedClubTitle);
+
+        if (selectedClub) {
+            displayClubDetails(selectedClub);
+        }
+    }
 }
 
 // Display football club details
 function displayClubDetails(club) {
-   // Write your code here for task2
-}
+    // Write your code here for task2
+    const clubDetailsHTML = `
+        <button onclick="window.location.reload();">Back</button>
+        <h2>${club.name}</h2>
+        <img src="${club.image}" alt="${club.name} logo">
+        <p><b>League: </b> ${club.league}</p>
+        <p><b>City: </b>${club.city}</p>
+        <p><b>Stadium: </b>${club.stadium}</p>
+        <button onclick="viewClubPlayers('${club.name}'); event.stopPropagation();" >View Players</button>
+        <p><b>Description: </b>${club.description}</p>
+    `;
+    clubDetailsContainer.innerHTML = clubDetailsHTML;
+};
+
 
 // Function to view club players
 function viewClubPlayers(clubName) {
    // Write your code here for task3
+   const selectedClub = clubData.find(club => club.name === clubName);
+   const playerDetailsHTML = `
+        <button onclick="window.location.reload();">Back</button>
+        <h2>${selectedClub.name} Players</h2>
+            ${selectedClub.players.map(player => `
+                <p><b>Name: </b>${player.name}</p>
+                <p><b>Position: </b>${player.position}</p>
+                <p><b>Goals: </b>${player.goals}</p>
+                <p><b>Assists: </b>${player.assists}</p>
+                <hr>
+            `).join('')}
+            `
+    clubDetailsContainer.innerHTML = playerDetailsHTML;
 }
 
 // Handle search input and filter clubs
 function handleSearchInput() {
     // Write your code here for task4
-}
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredClubs = clubData.filter(club => {
+        // Create a string containing club details for searching
+        const clubDataString = `${club.name} ${club.league} ${club.city}`.toLowerCase();
+        return clubDataString.includes(searchTerm);
+    });
+    displayClubs(filteredClubs);
+};
